@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="shortcut icon" href="./static/icon.png" type="image/x-icon">
+    <style>
+        .right2 {
+            display: none;
+        }
+    </style>
+    <title>ILAIx - AI for IL</title>
+</head>
+
+<body class="bg-chatblack-50">
+    <div class="flex text-white">
+        <div class="left bg-[#202123] w-2/12">
+            <div class="logo-title-container bg-[#202124] p-4 flex items-center space-x-4">
+                <img src="./static/icon.png" alt="Logo" class="logo">
+                <span class="title text-white font-bold text-2xl" style="padding-left: 15%;">ILAIx</span>
+            </div>
+            <button
+                onclick="window.location.href = '/';"
+                id="chatButton" class="w-[90%] py-2 m-2 px-10 space-x-2 border-white border rounded-md flex mx-4 justify-start items-center hover:opacity-70">
+                <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"
+                    stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>New Chat</span>
+            </button>
+            <div class="text-xs m-4 mx-8 text-gray-400">History</div>
+            <div class="left-scroll">
+                <div class="chats flex flex-col justify-center items-center space-y-2">
+                    {% for chat in myChats %}
+                    <button
+                        class="chat space-x-2 opacity-80 w-[90%] px-5 py-2 rounded-md bg-gray-600 cursor-pointer flex justify-start items-center"
+                        onclick="window.location.href = '/chat/{{ chat.license_name }}';">
+                        <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"
+                            stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        <span id="chatRequired">{{ chat.license_name }}</span>
+                    </button>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="right1 w-10/12 flex justify-center items-center flex-col h-[100vh]">
+            <div class="model-selection-container flex justify-end items-center w-full my-4 px-4">
+                <div class="custom-dropdown">
+                    <button id="dropdownButton" class="dropdown-btn flex items-center justify-between w-64 focus:outline-none">Select a Model 
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-md text-token-text-tertiary"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.29289 9.29289C5.68342 8.90237 6.31658 8.90237 6.70711 9.29289L12 14.5858L17.2929 9.29289C17.6834 8.90237 18.3166 8.90237 18.7071 9.29289C19.0976 9.68342 19.0976 10.3166 18.7071 10.7071L12.7071 16.7071C12.5196 16.8946 12.2652 17 12 17C11.7348 17 11.4804 16.8946 11.2929 16.7071L5.29289 10.7071C4.90237 10.3166 4.90237 9.68342 5.29289 9.29289Z" fill="currentColor"></path></svg>
+                    </button>
+                    <ul id="dropdownMenu" class="dropdown-menu">
+                        <li data-value="model3"> 
+                            <strong>FOSS Bert 2.0</strong>
+                            <p>Our latest model trained using hybrid techniques, providing the highest accuracy.in classification and explainability.</p>
+                        </li>
+                        <li data-value="model2"> 
+                            <strong>FOSS Bert 1.5</strong>
+                            <p>A previous version of our FOSS Bert model, still offering good performance and explainability.</p>
+                        </li>
+                        <li data-value="model1"> 
+                            <strong>FOSS Bert 1.0</strong>
+                            <p>The initial version of our FOSS Bert model, providing basic license classification capabilities.</p>
+                        </li>
+                    </ul>
+                </div>    
+            </div>
+            
+            <div class="text-center w-full text-4xl font-bold my-10">
+                An Intelligent License Evaluator
+            </div>
+
+            <div class="input w-full text-center my-24 flex items-center justify-center flex-col">
+                <div class="buttonsvg pl-16 w-[50vw] flex">
+                    <input class="w-full p-4 bg-gray-600 rounded-md" placeholder="Paste License Text with Name" type="text"
+                        name="text" id="questionInput">
+
+                    <button id="sendButton" class="relative -left-20 pl-10">
+                        <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24"
+                            stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
+                </div>
+                <div class="text-xs py-2 pr-10 opacity-70">Internal Development. FOSSBert may produce inaccurate
+                    information. <a class="underline"
+                        href="">Nilesh Rijhwani (IL/CDI)</a></div>
+            </div>
+        </div>
+
+        <div class="right2 w-full flex flex-col items-center h-fit">
+            <div class="model-selection-container flex relative items-center w-full my-4 px-4">
+                <div class="bg-gray-700 text-white py-2 px-4 rounded-md flex items-center">
+                    <span class="dropdown-btn flex items-center justify-between w-64 focus:outline-none" id="selectedModel">Loading ...</span>
+                </div>
+                <button id="explainButton" class="explainbtn">
+                    Explain
+                </button>
+            </div>
+            <div class="chat-section">
+                <div class="box1 m-auto py-7 flex justify-start w-[40vw] items-center space-x-6">
+                    <img class="w-9"
+                        src="./static/user.png"
+                        alt="">
+                    <div id="question2">Loading...</div>
+                </div>
+                <div class="box2 bg-gray-600 py-7 flex justify-center w-full items-center">
+                    <div class="box w-[40vw] flex justify-start space-x-6">
+                        <img class="w-9 h-9" src="./static/icon.png" alt="">
+                        <div class="flex space-y-4 flex-col">
+                            <div id="solution">Loading...</div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="input pt-75 w-full text-center mt-52 flex items-center justify-center flex-col">
+                    <div class="buttonsvg pl-16 w-[50vw] flex">
+                        <input class="w-full p-4 bg-gray-600 rounded-md" placeholder="Send a Message" type="text"
+                            name="text" id="questionInput">
+    
+                        <button class="relative -left-20 pl-10">
+                            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24"
+                                stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="text-xs py-2 pr-10 opacity-70">Internal Development. FOSSBert may produce inaccurate
+                        information. <a class="underline"
+                            href="">Nilesh Rijhwani (IL/CDI)</a>
+                    </div>
+                </div>    
+            </div>
+            
+        </div>
+
+    </div>
+
+    <div class="container">
+        <!-- We'll generate circles dynamically -->
+        <div id="circleContainer"></div>
+    </div>
+    <script src="/static/js/script.js"></script>
+</body>
+
+</html>
