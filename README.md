@@ -2,7 +2,7 @@
 
 *An intelligent License evaluater*
 
-![banner](docs/banner.png) <!-- optional: replace with your own banner or remove -->
+![banner](banner.png) <!-- optional: replace with your own banner or remove -->
 
 ---
 
