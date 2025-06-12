@@ -81,7 +81,7 @@ If you use **ILAIx** in academic work, please cite:
   title        = {ILAIx: An intelligent License evaluater},
   author       = {Nilesh Parshotam Rijhwani},
   year         = {2025},
-  howpublished = {\url{https://git.i.mercedes-benz.com/foss/ILAIx}},
+  howpublished = {\url{https://github.com/nr59684/ILAIx}},
 }
 ```
 
