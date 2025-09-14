@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>Admin Login – ILAIx</title>
+</head>
+<body class="bg-[#021027] flex flex-col items-center justify-center min-h-screen text-white">
+
+  <!-- ─────────────── Login card ─────────────── -->
+  <form method="POST" class="bg-[#202123] p-8 rounded-lg space-y-6 w-80">
+    <h1 class="text-2xl font-bold text-center">ILAIx Admin</h1>
+
+    {% if error %}
+      <p class="text-center text-red-400 text-sm">{{ error }}</p>
+    {% endif %}
+
+    <input name="username" placeholder="Username"
+           class="w-full rounded-md bg-gray-700 p-3 focus:outline-none" />
+
+    <input name="password" type="password" placeholder="Password"
+           class="w-full rounded-md bg-gray-700 p-3 focus:outline-none" />
+
+    <button class="w-full bg-indigo-600 py-2 rounded-md hover:bg-indigo-500">
+      Sign in
+    </button>
+  </form>
+
+  <!-- ─────────────── Home button ─────────────── -->
+  <button
+    onclick="location.href='/'"
+    class="mt-6 flex items-center gap-2 rounded-md border border-white px-5 py-2 hover:opacity-80">
+    <!-- house-icon -->
+    <svg viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+         stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+      <path d="M3 11l9-9 9 9" />
+      <path d="M4 10v10a2 2 0 0 0 2 2h3m10-12v10a2 2 0 0 1-2 2h-3M9 22h6" />
+    </svg>
+    <span>Home</span>
+  </button>
+
+</body>
+</html>

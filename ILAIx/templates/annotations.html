@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <!-- Tailwind utilities (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Your extra polish (sticky header / zebra / status-pill sizes, etc.) -->
+  <link rel="stylesheet" href="/static/css/annotations.css" />
+  <link rel="stylesheet" href="/static/css/main.css" />
+
+  <link rel="icon" href="/static/icon.png" />
+  <title>ILAIx – Annotations</title>
+</head>
+
+<body class="bg-[#021027] text-white h-screen overflow-hidden">
+  <div class="flex h-full">
+
+    <!-- ═══════════════ Sidebar ═══════════════ -->
+    <aside class="bg-[#202123]/50 flex flex-col">
+      <div class="flex items-center gap-4 px-4 py-3">
+        <img src="/static/icon.png" alt="ILAIx" class="h-8 w-8" />
+        <span class="text-2xl font-bold">ILAIx</span>
+      </div>
+
+      <button
+        onclick="location.href='/'"
+        class="mx-4 mt-4 flex items-center gap-2 rounded-md border border-white px-5 py-2 hover:opacity-80">
+        <svg viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+             stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5"  y1="12" x2="19" y2="12" />
+        </svg>
+        <span>New&nbsp;Chat</span>
+      </button>
+
+      <span class="px-6 mt-6 text-sm text-gray-400">Tools</span>
+
+      <!-- Search + incomplete toggle live here to keep left pane concise -->
+      <div class="mt-4 px-6 space-y-4">
+        <input id="searchInput"
+               class="w-full rounded-md bg-[#002744] p-2 placeholder-gray-400 text-white focus:outline-none"
+               placeholder="Search in categories…" />
+
+        <label class="flex items-center gap-2 text-sm select-none cursor-pointer">
+          <input id="toggleIncomplete" type="checkbox" class="h-4 w-4 rounded" />
+          <span>Show only incomplete jobs</span>
+        </label>
+      </div>
+
+      <div class="mt-auto mb-6 flex justify-center">
+        <button
+          onclick="location.href='/admin/logout'"
+          class="flex w-[90%] items-center gap-2 rounded-md border border-white px-5 py-2 hover:opacity-80">
+          <!-- logout icon -->
+          <svg viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+              stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          <span>Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ═══════════════ Main pane ═══════════════ -->
+    <main class="flex flex-1 flex-col h-full">
+      <h1 class="mx-auto mt-10 text-2xl font-bold">Annotation Jobs</h1>
+
+      <!-- table -->
+      <div class="table-container mx-auto mt-8 w-11/12 overflow-x-auto">
+        <table class="w-full table-auto text-left">
+          <thead class="text-sm uppercase tracking-wider">
+            <tr>
+              <th class="p-3">License</th>
+              <th class="p-3">Model</th>
+              <th class="p-3 text-center">Obligations</th>
+              <th class="p-3 text-center">Status</th>
+            </tr>
+          </thead>
+          <tbody id="jobsTable" class="divide-y divide-gray-700">
+            {% for row in rows %}
+              <tr
+                class="cursor-pointer hover:bg-[#002744]"
+                data-license="{{ row.license_name | lower }}"
+                data-model="{{ row.model | lower }}"
+                data-done="{{ '1' if row.done else '0' }}"
+                onclick="location.href='/annotate/{{ row.license_name }}';">
+                <td class="p-3 font-medium">{{ row.license_name }}</td>
+                <td class="p-3">{{ row.model }}</td>
+                <td class="p-3 text-center">{{ row.num_labels }}</td>
+                <td class="p-3 text-center">
+                  {% if row.done %}
+                    <span class="status-pill status-done">✔</span>
+                  {% else %}
+                    <span class="status-pill status-open">●</span>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <div class="container">
+        <!-- We'll generate circles dynamically -->
+        <div id="circleContainer"></div>
+  </div>
+
+  <script src="/static/js/script_annotations.js"></script>
+</body>
+</html>

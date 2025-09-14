@@ -1,157 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/css/main.css">
-    <link rel="shortcut icon" href="./static/icon.png" type="image/x-icon">
-    <style>
-        .right2 {
-            display: none;
-        }
-    </style>
-    <title>ILAIx - AI for IL</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <!-- Tailwind utilities (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Your compiled extras (if any) -->
+  <link rel="stylesheet" href="/static/css/main.css" />
+
+  <link rel="icon" href="/static/icon.png" />
+  <title>ILAIx – AI for IL</title>
 </head>
 
-<body class="bg-chatblack-50">
-    <div class="flex text-white">
-        <div class="left bg-[#202123] w-2/12">
-            <div class="logo-title-container bg-[#202124] p-4 flex items-center space-x-4">
-                <img src="./static/icon.png" alt="Logo" class="logo">
-                <span class="title text-white font-bold text-2xl" style="padding-left: 15%;">ILAIx</span>
-            </div>
-            <button
-                onclick="window.location.href = '/';"
-                id="chatButton" class="w-[90%] py-2 m-2 px-10 space-x-2 border-white border rounded-md flex mx-4 justify-start items-center hover:opacity-70">
-                <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"
-                    stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-                <span>New Chat</span>
-            </button>
-            <div class="text-xs m-4 mx-8 text-gray-400">History</div>
-            <div class="left-scroll">
-                <div class="chats flex flex-col justify-center items-center space-y-2">
-                    {% for chat in myChats %}
-                    <button
-                        class="chat space-x-2 opacity-80 w-[90%] px-5 py-2 rounded-md bg-gray-600 cursor-pointer flex justify-start items-center"
-                        onclick="window.location.href = '/chat/{{ chat.license_name }}';">
-                        <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"
-                            stroke-linejoin="round" class="h-4 w-4" height="1em" width="1em"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                        </svg>
-                        <span id="chatRequired">{{ chat.license_name }}</span>
-                    </button>
-                    {% endfor %}
-                </div>
-            </div>
+<body class="bg-[#021027] text-white h-screen overflow-hidden">
+  <div class="flex h-full">
+
+    <!-- ═══════════════ Sidebar ═══════════════ -->
+    <aside class="bg-[#202123]/50 flex flex-col">
+      <div class="flex items-center gap-4 px-4 py-3">
+        <img src="/static/icon.png" alt="ILAIx" class="h-8 w-8" />
+        <span class="text-2xl font-bold">ILAIx</span>
+      </div>
+
+      <button
+        onclick="location.href='/'"
+        class="mx-4 mt-4 flex items-center gap-2 rounded-md border border-white px-5 py-2 hover:opacity-80">
+        <svg viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+             stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5"  y1="12" x2="19" y2="12" />
+        </svg>
+        <span>New&nbsp;Chat</span>
+      </button>
+      
+      <button
+        onclick="location.href='/annotations'"
+        class="mx-4 my-2 flex items-center gap-2 rounded-md border border-white px-5 py-2 hover:opacity-80">
+        <!-- pencil-ruler icon -->
+        <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+          <path d="M16 2l6 6-9 9H7v-6l9-9z"></path>
+          <path d="M7 17l-4 4"></path>
+        </svg>
+        <span>Admin</span>
+      </button>
+
+      <span class="mt-6 mb-2 px-6 text-sm text-gray-400">History</span>
+      
+
+      <div class="flex-1 overflow-y-auto space-y-2 px-3 pb-6">
+        {% for chat in myChats %}
+          <button
+            onclick="location.href='/chat/{{ chat.license_name }}'"
+            class="flex w-full items-center gap-2 rounded-md bg-[#002744]/60 px-4 py-2 hover:bg-[#002743]">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                 stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
+            <span>{{ chat.license_name }}</span>
+          </button>
+        {% endfor %}
+      </div>
+    </aside>
+
+    <!-- ═══════════════ Primary pane (model picker + input) ═══════════════ -->
+    <main id="primaryPane" class="flex flex-1 flex-col items-center overflow-y-auto">
+      <!-- model dropdown -->
+      <div class="flex w-full justify-end px-4 py-4">
+        <div class="relative mr-auto">
+          <button id="dropdownButton"
+                  class="flex w-64 items-center justify-between rounded-md bg-[#002744] px-4 py-2">
+            Select a Model
+            <svg viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M5.293 9.293a1 1 0 0 1 1.414 0L12 14.586l5.293-5.293a1 1 0 1 1 1.414 1.414l-6 6a1 1 0 0 1-1.414 0l-6-6a1 1 0 0 1 0-1.414z"/>
+            </svg>
+          </button>
+
+          <ul id="dropdownMenu"
+              class="absolute z-10 mt-2 hidden w-72 space-y-2 rounded-md bg-[#002744]/50 p-3">
+            <li data-value="model3" class="cursor-pointer rounded-md p-2 hover:bg-[#002743]/70">
+              <strong>FOSS&nbsp;Bert&nbsp;2.0</strong>
+              <p class="text-sm opacity-80">
+                Latest hybrid model – highest accuracy in classification and explainability.
+              </p>
+            </li>
+            <li data-value="model2" class="cursor-pointer rounded-md p-2 hover:bg-[#002743]/70">
+              <strong>FOSS&nbsp;Bert&nbsp;1.5</strong>
+              <p class="text-sm opacity-80">Previous version – still solid performance.</p>
+            </li>
+            <li data-value="model1" class="cursor-pointer rounded-md p-2 hover:bg-[#002743]/70">
+              <strong>FOSS&nbsp;Bert&nbsp;1.0</strong>
+              <p class="text-sm opacity-80">Initial release – basic license classification.</p>
+            </li>
+          </ul>
         </div>
-        <div class="right1 w-10/12 flex justify-center items-center flex-col h-[100vh]">
-            <div class="model-selection-container flex justify-end items-center w-full my-4 px-4">
-                <div class="custom-dropdown">
-                    <button id="dropdownButton" class="dropdown-btn flex items-center justify-between w-64 focus:outline-none">Select a Model 
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-md text-token-text-tertiary"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.29289 9.29289C5.68342 8.90237 6.31658 8.90237 6.70711 9.29289L12 14.5858L17.2929 9.29289C17.6834 8.90237 18.3166 8.90237 18.7071 9.29289C19.0976 9.68342 19.0976 10.3166 18.7071 10.7071L12.7071 16.7071C12.5196 16.8946 12.2652 17 12 17C11.7348 17 11.4804 16.8946 11.2929 16.7071L5.29289 10.7071C4.90237 10.3166 4.90237 9.68342 5.29289 9.29289Z" fill="currentColor"></path></svg>
-                    </button>
-                    <ul id="dropdownMenu" class="dropdown-menu">
-                        <li data-value="model3"> 
-                            <strong>FOSS Bert 2.0</strong>
-                            <p>Our latest model trained using hybrid techniques, providing the highest accuracy.in classification and explainability.</p>
-                        </li>
-                        <li data-value="model2"> 
-                            <strong>FOSS Bert 1.5</strong>
-                            <p>A previous version of our FOSS Bert model, still offering good performance and explainability.</p>
-                        </li>
-                        <li data-value="model1"> 
-                            <strong>FOSS Bert 1.0</strong>
-                            <p>The initial version of our FOSS Bert model, providing basic license classification capabilities.</p>
-                        </li>
-                    </ul>
-                </div>    
-            </div>
-            
-            <div class="text-center w-full text-4xl font-bold my-10">
-                An Intelligent License Evaluator
-            </div>
+      </div>
 
-            <div class="input w-full text-center my-24 flex items-center justify-center flex-col">
-                <div class="buttonsvg pl-16 w-[50vw] flex">
-                    <input class="w-full p-4 bg-gray-600 rounded-md" placeholder="Paste License Text with Name" type="text"
-                        name="text" id="questionInput">
+      <h1 class="my-10 text-4xl font-bold text-center">
+        An Intelligent License Evaluator
+      </h1>
 
-                    <button id="sendButton" class="relative -left-20 pl-10">
-                        <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24"
-                            stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <line x1="22" y1="2" x2="11" y2="13"></line>
-                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                        </svg>
-                    </button>
-                </div>
-                <div class="text-xs py-2 pr-10 opacity-70">Internal Development. FOSSBert may produce inaccurate
-                    information. <a class="underline"
-                        href="">Nilesh Rijhwani (IL/CDI)</a></div>
-            </div>
+      <!-- input box -->
+      <form id="inputForm" class="flex w-1/2 max-w-3xl items-center gap-4">
+        <input id="questionInput"
+               class="flex-1 rounded-md bg-[#002743] p-4 focus:outline-none"
+               placeholder="Paste License Text with Name" autocomplete="off" />
+
+        <button id="sendButton" type="button" disabled
+                class="flex h-11 w-11 items-center justify-center hover:opacity-40 cursor-not-allowed">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+               stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+            <line x1="22" y1="2" x2="11" y2="13" />
+            <polygon points="22 2 15 22 11 13 2 9 22 2" />
+          </svg>
+        </button>
+      </form>
+
+      <p class="mt-2 text-xs opacity-70">
+        Internal development — ILAIx may produce inaccurate information.
+        <a href="#" class="underline">Nilesh&nbsp;Rijhwani&nbsp;(IL/CDI)</a>
+      </p>
+    </main>
+
+    <!-- ═══════════════ Secondary pane (hidden until a result) ═══════════════ -->
+    <section id="secondaryPane"
+             class="hidden flex-1 flex-col items-center overflow-y-auto">
+      <!-- top bar -->
+      <div class="flex w-full items-center px-6 py-4">
+        <div class="rounded-md bg-[#002744] px-4 py-2" id="selectedModel">
+          Loading&nbsp;…
+        </div>
+        <button id="explainButton"
+                class="ml-auto rounded-md bg-indigo-600 px-5 py-2 hover:bg-indigo-500">
+          Explain
+        </button>
+      </div>
+
+      <!-- conversation panel -->
+      <div class="flex flex-col items-center space-y-0.5 pb-14">
+        <div class="flex w-4/5 max-w-3xl items-start gap-4 py-7">
+          <img src="/static/user.png" alt="user" class="h-9 w-9" />
+          <div id="question2">Loading…</div>
         </div>
 
-        <div class="right2 w-full flex flex-col items-center h-fit">
-            <div class="model-selection-container flex relative items-center w-full my-4 px-4">
-                <div class="bg-gray-700 text-white py-2 px-4 rounded-md flex items-center">
-                    <span class="dropdown-btn flex items-center justify-between w-64 focus:outline-none" id="selectedModel">Loading ...</span>
-                </div>
-                <button id="explainButton" class="explainbtn">
-                    Explain
-                </button>
-            </div>
-            <div class="chat-section">
-                <div class="box1 m-auto py-7 flex justify-start w-[40vw] items-center space-x-6">
-                    <img class="w-9"
-                        src="./static/user.png"
-                        alt="">
-                    <div id="question2">Loading...</div>
-                </div>
-                <div class="box2 bg-gray-600 py-7 flex justify-center w-full items-center">
-                    <div class="box w-[40vw] flex justify-start space-x-6">
-                        <img class="w-9 h-9" src="./static/icon.png" alt="">
-                        <div class="flex space-y-4 flex-col">
-                            <div id="solution">Loading...</div>
-                        </div>
-                    </div>
-                </div>
-    
-                <div class="input pt-75 w-full text-center mt-52 flex items-center justify-center flex-col">
-                    <div class="buttonsvg pl-16 w-[50vw] flex">
-                        <input class="w-full p-4 bg-gray-600 rounded-md" placeholder="Send a Message" type="text"
-                            name="text" id="questionInput">
-    
-                        <button class="relative -left-20 pl-10">
-                            <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24"
-                                stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <line x1="22" y1="2" x2="11" y2="13"></line>
-                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="text-xs py-2 pr-10 opacity-70">Internal Development. FOSSBert may produce inaccurate
-                        information. <a class="underline"
-                            href="">Nilesh Rijhwani (IL/CDI)</a>
-                    </div>
-                </div>    
-            </div>
-            
+        <div class="flex w-full justify-center bg-[#002743]/60 py-7">
+          <div class="flex w-4/5 max-w-3xl items-start gap-4">
+            <img src="/static/icon.png" alt="bot" class="h-9 w-9" />
+            <div id="solution" class="space-y-4">Loading…</div>
+          </div>
         </div>
+      </div>
 
-    </div>
+      <!-- secondary input -->
+      <form class="hidden w-1/2 max-w-3xl items-center gap-4 mb-20">
+        <input class="flex-1 rounded-md bg-[#002743] p-4 focus:outline-none"
+               placeholder="Send a message…" />
 
+        <button type="button" class="flex h-11 w-11 items-center justify-center hover:opacity-80">
+          <svg viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+               stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+            <line x1="22" y1="2" x2="11" y2="13" />
+            <polygon points="22 2 15 22 11 13 2 9 22 2" />
+          </svg>
+        </button>
+      </form>
+    </section>
+  </div>
+
+  <!-- optional animated background -->
     <div class="container">
         <!-- We'll generate circles dynamically -->
         <div id="circleContainer"></div>
     </div>
-    <script src="/static/js/script.js"></script>
-</body>
 
+  <script src="/static/js/script.js"></script>
+</body>
 </html>

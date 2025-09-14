@@ -1,0 +1,62 @@
+/* === Annotation-table polish ========================================== */
+
+/* wrap the whole <table> (we already gave it class="overflow-x-auto …")  */
+.table-container {
+  overflow: hidden;                /* trims drop-shadow glow */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  width: 95%;
+}
+
+.table-container table {
+    border-width: thin;
+    margin-top: 3%;
+    border-radius: 0.5rem;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+/* sticky header so column titles stay visible on long lists */
+.table-container thead tr {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.table-container thead th {
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #52525b;
+}
+
+/* zebra-striping */
+.table-container tbody tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.025);
+}
+
+/* subtle hover highlight */
+.table-container tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  transition: background-color 0.15s ease-in-out;
+}
+
+/* status pill colours */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.status-done  { background-color: #22c55e; } /* green ✔ */
+.status-open  { background-color: #facc15; } /* amber ● */
+
+/* thicken cursor & make highlight spans non-selectable (cosmetic) */
+#textPane span.hl {
+  user-select: none;
+  cursor: pointer;
+}
